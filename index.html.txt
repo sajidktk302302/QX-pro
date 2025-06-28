@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SD302 Quotex Bot</title>
+
+    <!-- AdMob App ID (Metadata) Start -->
+    <meta name="google-mobile-ads-app-id" content="ca-app-pub-8904218274531216~8871127547">
+    <!-- AdMob App ID (Metadata) End -->
+
+    <!-- Google AdSense Ad Start -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8904218274531216" crossorigin="anonymous"></script>
+    <!-- Google AdSense Ad End -->
+
+    <!-- Ad Script 1 Start -->
+    <script type='text/javascript' src='//pl27011260.profitableratecpm.com/83/50/05/83500569724584798fb281e2da26e59e.js'></script>
+    <!-- Ad Script 1 End -->
+    
+    <!-- Ad Script 2 Start -->
+    <script type='text/javascript' src='//pl27011241.profitableratecpm.com/76/93/d2/7693d2aa9a304593e92abc6456a1c088.js'></script>
+    <!-- Ad Script 2 End -->
+
+    <style>
+        /* --- Modern & Colorful UI (Existing Structure) --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        :root {
+            --bg-color: #1a1a2e;
+            --container-bg: #2a2a4e;
+            --primary-accent: #4f46e5;
+            --secondary-accent: #8b5cf6;
+            --text-color: #e0e0e0;
+            --border-color: #3c3c5c;
+            --success-color: #10b981; /* Brighter Green */
+            --danger-color: #ef4444;  /* Brighter Red */
+            --warning-color: #f59e0b; /* Amber */
+            --neutral-color: #6b7280; /* Gray */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column; /* Allow stacking of container and footer */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            background-color: var(--container-bg);
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center; color: #fff; margin-bottom: 25px; font-weight: 700;
+        }
+
+        h1 sup {
+            font-size: 0.5em; padding: 2px 5px; border-radius: 4px; background-color: var(--primary-accent); color: white; vertical-align: top;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block; margin-bottom: 10px; font-weight: 600; color: var(--text-color);
+        }
+
+        input[type="file"], select {
+            width: 100%; padding: 12px; box-sizing: border-box; border-radius: 8px; border: 1px solid var(--border-color); background-color: #1e1e3f; color: var(--text-color); font-family: 'Poppins', sans-serif;
+        }
+        
+        input[type="file"]::file-selector-button {
+            font-weight: bold; color: white; background: linear-gradient(45deg, var(--primary-accent), var(--secondary-accent)); padding: 8px 12px; border: none; border-radius: 6px; cursor: pointer; margin-right: 10px;
+        }
+
+        button#getSignalBtn {
+            width: 100%; padding: 15px; font-size: 1.2em; font-weight: bold; color: white; background: linear-gradient(45deg, var(--primary-accent), var(--secondary-accent)); cursor: pointer; border: none; border-radius: 8px; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button#getSignalBtn:hover:not(:disabled) {
+            transform: translateY(-2px); box-shadow: 0 6px 20px rgba(119, 87, 231, 0.4);
+        }
+        
+        button#getSignalBtn:disabled {
+            background: var(--neutral-color); cursor: not-allowed; box-shadow: none; transform: none;
+        }
+
+        #signalResult {
+            font-size: 1.6em; font-weight: 700; text-align: center; margin-top: 30px; min-height: 60px; padding: 20px; border-radius: 10px; line-height: 1.4; transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        #countdownTimer {
+            text-align: center; font-size: 1.1em; color: #a0a0c0; margin-top: 15px; min-height: 25px;
+        }
+
+        .footer-ad-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .footer-ad-container a {
+            color: var(--secondary-accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .footer-ad-container a:hover {
+            text-decoration: underline;
+        }
+        
+        canvas {
+            display: none; /* Canvas remains for processing only */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SD302 QX pro BOt <sup>PRO</sup></h1>
+
+        <div class="control-group">
+            <label for="screenshotUpload">1. Upload Chart Screenshot</label>
+            <input type="file" id="screenshotUpload" accept="image/png, image/jpeg">
+        </div>
+
+        <div class="control-group">
+            <label for="timeframeSelect">2. Select Timeframe</label>
+            <select id="timeframeSelect">
+                <option value="">-- Please Select --</option>
+                <option value="1">1 Minute</option>
+                <option value="5">5 Minutes</option>
+                <option value="15">15 Minutes</option>
+            </select>
+        </div>
+
+        <button id="getSignalBtn" disabled>Get Signal</button>
+
+        <div id="signalResult"></div>
+        <div id="countdownTimer"></div>
+
+        <!-- Iframe Ad Banner Start -->
+        <div style="display: flex; justify-content: center; margin-top: 25px;">
+            <script type="text/javascript"> 
+                atOptions = {
+                    'key' : '62b08fac83a5b4df587512fd8be51680',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/62b08fac83a5b4df587512fd8be51680/invoke.js"></script>
+        </div>
+        <!-- Iframe Ad Banner End -->
+
+    </div>
+
+    <div class="footer-ad-container">
+        <!-- Ad with Container (Footer Banner) Start -->
+        <script async="async" data-cfasync="false" src="//pl27003152.profitableratecpm.com/f7b72d0b6705160d9a066a80839507b4/invoke.js"></script>
+        <div id="container-f7b72d0b6705160d9a066a80839507b4"></div>
+        <!-- Ad with Container (Footer Banner) End -->
+
+        <br>
+
+        <!-- Redirect Ad link Start -->
+        <a href="https://www.profitableratecpm.com/y3egtuh53i?key=6e1ce3773609a1f513c13b7e703d07c1" target="_blank" rel="noopener noreferrer">
+            Special Offers & Premium Tools
+        </a>
+        <!-- Redirect Ad link End -->
+    </div>
+
+    <canvas id="imageCanvas"></canvas>
+
+    <script>
+        // --- ALL JAVASCRIPT LOGIC FOR THE BOT REMAINS UNCHANGED ---
+        const screenshotUpload = document.getElementById('screenshotUpload');
+        const timeframeSelect = document.getElementById('timeframeSelect');
+        const getSignalBtn = document.getElementById('getSignalBtn');
+        const signalResult = document.getElementById('signalResult');
+        const countdownTimer = document.getElementById('countdownTimer');
+        const canvas = document.getElementById('imageCanvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        let isImageReady = false;
+        let countdownInterval;
+        const ZONE_THRESHOLD = 0.003;
+        const SLOPE_THRESHOLD = 0.25;
+        const ANALYSIS_SLICES = 15;
+        function checkFormCompletion() {
+            const isTimeframeSelected = !!timeframeSelect.value;
+            getSignalBtn.disabled = !(isImageReady && isTimeframeSelected);
+        }
+        screenshotUpload.addEventListener('change', (event) => {
+            isImageReady = false;
+            checkFormCompletion();
+            signalResult.innerHTML = '';
+            signalResult.style.backgroundColor = 'transparent';
+            countdownTimer.innerHTML = '';
+            clearInterval(countdownInterval);
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    isImageReady = true;
+                    checkFormCompletion();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+        timeframeSelect.addEventListener('change', checkFormCompletion);
+        getSignalBtn.addEventListener('click', handleSignalRequest);
+        function handleSignalRequest() {
+            getSignalBtn.disabled = true;
+            signalResult.textContent = "Analyzing Market...";
+            signalResult.style.color = '#e0e0e0';
+            signalResult.style.backgroundColor = 'transparent';
+            setTimeout(runAnalysis, 100); 
+        }
+        function runAnalysis() {
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            if (isMarketInZone(imageData)) {
+                displaySignal("WAIT");
+                startCountdown();
+                return;
+            }
+            const trend = detectTrend(imageData);
+            displaySignal(trend);
+            startCountdown();
+        }
+        function isGreen(r, g, b) { return g > r && g > b && g > 90 && r < 120 && b < 120; }
+        function isRed(r, g, b) { return r > g && r > b && r > 90 && g < 120 && b < 120; }
+        function isMarketInZone(imageData) {
+            const { data, width, height } = imageData;
+            const bandHeight = 15;
+            for (let y = height / 4; y < height * 3 / 4; y += bandHeight) {
+                let redCount = 0, greenCount = 0;
+                for (let bandY = y; bandY < y + bandHeight; bandY++) {
+                    for (let x = width / 2; x < width; x++) {
+                        const i = (bandY * width + x) * 4;
+                        if (isGreen(data[i], data[i + 1], data[i + 2])) greenCount++;
+                        if (isRed(data[i], data[i + 1], data[i + 2])) redCount++;
+                    }
+                }
+                const totalPixelsInBand = (width / 2) * bandHeight;
+                if (redCount / totalPixelsInBand > ZONE_THRESHOLD && greenCount / totalPixelsInBand > ZONE_THRESHOLD) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function detectTrend(imageData) {
+            const { data, width, height } = imageData;
+            const points = [];
+            const startX = Math.floor(width / 2);
+            const sliceWidth = (width - startX) / ANALYSIS_SLICES;
+            for (let i = 0; i < ANALYSIS_SLICES; i++) {
+                const sliceX = startX + (i * sliceWidth);
+                let ySum = 0, pixelCount = 0;
+                for (let y = 0; y < height; y++) {
+                    for (let x = Math.floor(sliceX); x < sliceX + sliceWidth; x++) {
+                        const pixelIndex = (y * width + x) * 4;
+                        const [r, g, b] = [data[pixelIndex], data[pixelIndex + 1], data[pixelIndex + 2]];
+                        if (isGreen(r, g, b) || isRed(r, g, b)) {
+                            ySum += y;
+                            pixelCount++;
+                        }
+                    }
+                }
+                if (pixelCount > 0) points.push({ x: i, y: ySum / pixelCount });
+            }
+            if (points.length < ANALYSIS_SLICES / 2) return "SIDEWAYS";
+            const slope = linearRegression(points);
+            if (slope > SLOPE_THRESHOLD) return "DOWN";
+            if (slope < -SLOPE_THRESHOLD) return "UP";
+            return "SIDEWAYS";
+        }
+        function linearRegression(points) {
+            let n = points.length, sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+            for (const p of points) {
+                sumX += p.x; sumY += p.y; sumXY += p.x * p.y; sumXX += p.x * p.x;
+            }
+            const denominator = (n * sumXX) - (sumX * sumX);
+            return denominator === 0 ? 0 : ((n * sumXY) - (sumX * sumY)) / denominator;
+        }
+        function displaySignal(type) {
+            const timeframeText = `${timeframeSelect.value} Minute(s)`;
+            let message = '', color = '#fff', backgroundColor = 'var(--neutral-color)';
+            switch(type) {
+                case 'UP':
+                    message = `✅ Signal: UP for ${timeframeText}`;
+                    backgroundColor = 'var(--success-color)';
+                    break;
+                case 'DOWN':
+                    message = `✅ Signal: DOWN for ${timeframeText}`;
+                    backgroundColor = 'var(--danger-color)';
+                    break;
+                case 'WAIT':
+                    message = `⚠️ Wait — Near Strong Zone`;
+                    backgroundColor = 'var(--warning-color)';
+                    color = '#1a1a2e';
+                    break;
+                default:
+                    message = '⏸️ Sideways Market — No Entry';
+                    backgroundColor = 'var(--neutral-color)';
+                    break;
+            }
+            signalResult.textContent = message;
+            signalResult.style.backgroundColor = backgroundColor;
+            signalResult.style.color = color;
+        }
+        function startCountdown() {
+            clearInterval(countdownInterval);
+            let totalSeconds = parseInt(timeframeSelect.value, 10) * 60;
+            countdownInterval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownTimer.textContent = "Ready for next signal.";
+                    checkFormCompletion();
+                } else {
+                    const mins = Math.floor(totalSeconds / 60);
+                    const secs = totalSeconds % 60;
+                    countdownTimer.textContent = `Next signal in: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                    totalSeconds--;
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
